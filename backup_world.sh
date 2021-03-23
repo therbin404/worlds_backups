@@ -36,13 +36,16 @@ cd $destination_folder
 # On liste tous les fichiers du dossier de sauvegarde par ordre de timestamp, on supprime les X premières lignes (soit autant de saves qu'on veut garder)
 # puis on supprime toutes les lignes restantes en prenant en compte les caractères spéciaux (-d)
 ls -t | sed -e "1,${keep_saves}d" | xargs -0 -d '\n' rm
-echo 'La copie du fichier a été faite, le serveur va démarrer.'
+echo 'La copie du fichier de sauvegarde a été faite.'
 # On démarre un nouveau screen format jeu_server
 screen -dmS ${game}_server
-if [ $auto_update = "1" ] then 
-    # On s'attache au screen, et on lance la commande pour démarrer le serveur
-    screen -r ${game}_server -X stuff "steamcmd +login anonymous +force_install_dir $server_folder +app_update $app_id +quit && cd ${server_folder}\n${server_script}\n"
+if [ $auto_update = "1" ] 
+then 
+    # On s'attache au screen, et on lance la commande pour update (via steamcmd) et démarrer le serveur
+    screen -r ${game}_server -X stuff "steamcmd +login anonymous +force_install_dir ${server_folder} +app_update ${app_id} +quit && cd ${server_folder}\n${server_script}\n"
+    echo "Le serveur a été mis a jour (si disponible) et lancé."
 else
-    # On s'attache au screen, et on lance la commande pour démarrer le serveur
+    # On s'attache au screen, et on démarre simplement le serveur
     screen -r ${game}_server -X stuff "cd ${server_folder}\n${server_script}\n"
+    echo "Le serveur a été lancé."
 fi
