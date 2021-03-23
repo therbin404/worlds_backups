@@ -6,15 +6,17 @@ save_folder='worlds/'
 # Chemin où le dossier compressé doit être copié
 destination_folder='/home/steam/servers/valheim/'
 # Dossier qui contient le script du start server et script a lancer
-script_folder='/home/steam/servers/valheim/'
+server_folder='/home/steam/servers/valheim/'
 server_script='./start_server.sh'
 #Le nombre de sauvegardes qu'on veut garder
 keep_saves=14
+auto_update=1
+app_id=896660
 
 ############### SCRIPT DE COPIE #################
 # On stoppe ici le server via son screen (jeu_server)en checkant toutes les secondes que le serveur est stoppé proprement et complètement
 while pkill --signal SIGINT "${game}_server"; do
-  sleep 1
+    sleep 1
 done
 # On supprime le screen
 screen -X -S ${game}_server quit
@@ -37,5 +39,10 @@ ls -t | sed -e "1,${keep_saves}d" | xargs -0 -d '\n' rm
 echo 'La copie du fichier a été faite, le serveur va démarrer.'
 # On démarre un nouveau screen format jeu_server
 screen -dmS ${game}_server
-# On s'attache au screen, et on lance la commande pour démarrer le serveur
-screen -r ${game}_server -X stuff "cd ${script_folder}\n${server_script}\n"
+if [ $auto_update = "1" ] then 
+    # On s'attache au screen, et on lance la commande pour démarrer le serveur
+    screen -r ${game}_server -X stuff "steamcmd +login anonymous +force_install_dir $server_folder +app_update $app_id +quit && cd ${server_folder}\n${server_script}\n"
+else
+    # On s'attache au screen, et on lance la commande pour démarrer le serveur
+    screen -r ${game}_server -X stuff "cd ${server_folder}\n${server_script}\n"
+fi
