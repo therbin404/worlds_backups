@@ -42,7 +42,7 @@ screen -dmS ${game}_server
 if [ $auto_update = "1" ] 
 then 
     # On s'attache au screen, et on lance la commande pour update (via steamcmd) et démarrer le serveur
-    screen -r ${game}_server -X stuff "cd && ./steamcmd +login anonymous +force_install_dir ${server_folder} +app_update ${app_id} +quit && cd ${server_folder}\n${server_script}\n"
+    screen -r ${game}_server -X stuff "cd && ./steamcmd +login anonymous +force_install_dir ${server_folder} +app_update ${app_id} validate +quit && cd ${server_folder}\n${server_script}\n"
     echo "Le serveur a été mis a jour (si disponible) et lancé."
 else
     # On s'attache au screen, et on démarre simplement le serveur
