@@ -30,7 +30,7 @@ copy_name="${destination_folder}${game}_server_${actual_date}.rar"
 # On se place dans le dossier qui contient les saves (pour ne pas avoir tout le chemin depuis home dans le rar)
 cd $save_folder_parent
 # On rar le dossier des saves (rar a chemin/ou/le/dossier/va/etre.rar dossier/a/compresser/)
-rar a $copy_name $save_folder
+rar a -r $copy_name $save_folder
 # On se place dans le dossier des saves
 cd $destination_folder
 # On liste tous les fichiers du dossier de sauvegarde par ordre de timestamp, on supprime les X premières lignes (soit autant de saves qu'on veut garder)
